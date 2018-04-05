@@ -10,8 +10,10 @@ tests_pre:
 		DECLARED_VERSION=`awk 'match($$0, /^const VERSION string = "(.*?)"$$/,a) {print a[1]}' main.go`; \
 		GIT_VERSION=`git rev-parse --abbrev-ref HEAD | cut -d '/' -f 2`; \
 		if test "$${DECLARED_VERSION}" != "$${GIT_VERSION}"; then \
-			echo >&2 "main.go is v$${DECLARED_VERSION} but you are working on the $${GIT_VERSION} version"; \
-			exit 1; \
+			echo -e >&2 "\e[1;31mmain.go is v$${DECLARED_VERSION} but you are working on the $${GIT_VERSION} version\e[0m"; \
+			if test "$${GIT_VERSION}" != "master"; then \
+				exit 1; \
+			fi; \
 		fi; \
 	)
 
